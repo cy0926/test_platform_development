@@ -11,10 +11,10 @@
     <!--<link rel="icon" href="../../favicon.ico">  -->
 
     <title> 测试平台 </title>
-
+<!--
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://v3.bootcss.com/assets/js/vendor/holder.min.js"></script>
-
+-->
     <!-- Bootstrap core CSS -->
     <!--  引用本地样式 -->
     {% load static %}
@@ -73,7 +73,7 @@
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
          <div>
           <h1 class="sub-header">项目列表</h1>
-          <button type="submit" class="btn btn-primary" onclick="window.location.href='/add_project/'" style="margin-top: 8px;">添加项目</button>
+          <button type="submit" class="btn btn-primary" onclick="window.location.href='/add_index/'" style="margin-top: 8px;">添加项目</button>
          </div>
           <div class="table-responsive">
             <table class="table table-striped">
@@ -97,7 +97,7 @@
                     <td>{{ project.create_time }}</td>
                     <td>
                       <a>编辑</a>
-                      <a>删除</a>
+                      <a href="{% url 'delete' project.id %}">删除</a>
                     </td>
                   </tr>
 
@@ -110,13 +110,17 @@
                   <span class="step-links">
                     <ul class="pagination">
                       {% if projects.has_previous %}
-                        <li><a href="?page={{ projects.previous_page_number }}">&laquo;</a></li>
+                        <li><a href="?search={{ search }}&page={{ projects.previous_page_number }}">&laquo;</a></li>
                       {% endif %}
 
                        <li><a href="#">{{ projects.number }}</a></li>
 
                       {% if projects.has_next %}
-                          <li><a href="?page={{ projects.next_page_number }}">&raquo;</a></li>
+                        {% if search %}
+                           <li><a href="?search={{ search }}&page={{ projects.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                           <li><a href="?page={{ projects.next_page_number }}">&raquo;</a></li>
+                        {% endif %}
                       {% endif %}
                       <li><a href="#">共：{{ projects.paginator.num_pages }} 页</a></li>
                     </ul>
@@ -174,12 +178,13 @@
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Placed at the end of the document so the pages load faster
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"><\/script>')</script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <!-- Just to make our placeholder images work. Don't actually copy the next line!
     <script src="https://v3.bootcss.com/assets/js/vendor/holder.min.js"></script>
+    -->
   </body>
 
 </html>

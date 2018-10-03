@@ -25,5 +25,8 @@ urlpatterns = [
     path('login_action/', views.login_action),
     path('project_manage/', views.project_manage),
     path('logout/', views.logout),
-    path('search/', views.search)
+    path('search/', views.search),
+    path('add_index/', views.add_index),
+    path('add_project/', views.add_project),
+    path('^delete/(?P<project_id>[0-9]+)/$', views.delete_project, name="delete"),
 ]

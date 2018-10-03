@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css">
+
+
+    <script type="text/javascript" src="/admin/jsi18n/"></script>
+      <!--
+    <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+    -->
+    <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+    <script type="text/javascript" src="/static/admin/js/core.js"></script>
+    <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+    <script type="text/javascript" src="/static/admin/js/actions.js"></script>
+    <script type="text/javascript" src="/static/admin/js/urlify.js"></script>
+    <script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
+    <script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--<link rel="icon" href="../../favicon.ico">  -->
+
+    <title> 测试平台 </title>
+
+    <!--
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://v3.bootcss.com/assets/js/vendor/holder.min.js"></script>
+    -->
+
+    <!-- Bootstrap core CSS -->
+    <!--  引用本地样式 -->
+    {% load static %}
+    <!-- <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">  -->
+    <link href="{%static  'css/bootstrap.min.css '%}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <!--<link href="https://v3.bootcss.com/examples/dashboard/dashboard.css", rel="stylesheet">-->
+    <link href="{%static 'css/dashboard.css'%}" rel="stylesheet">
+
+  </head>
+<body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">测试平台</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">{{ user }}</a></li>
+            <li><a href="/logout/">退出</a></li>
+          </ul>
+          <form class="navbar-form navbar-right" method="get" action="/search/">
+            <input name="search" type="text" class="form-control" placeholder="搜索...">
+
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <div id="content" class="colM">
+
+    <h1>添加项目</h1>
+    <div id="content-main" class="container">
+
+
+
+    <form action="/add_project/" method="post" id="projectmanage_form" novalidate>
+        <input type="hidden" name="csrfmiddlewaretoken" value="">
+    <div>
+       <div class="form-row field-title">
+            <div>
+                <label class="required" for="id_title">名称：</label>
+                  <input type="text" name="title" class="vTextField" maxlength="100" required id="id_title" required>
+            </div>
+       </div>
+       <div class="form-row field-description">
+            <div>
+               <label class="required" for="id_title">描述：</label>
+                  <input type="text" name="description" class="vTextField" maxlength="100" required id="id_description" required>
+            </div>
+       </div>
+       <div class="form-row field-status">
+            <div class="checkbox-row">
+                <input type="checkbox" name="status" id="id_status"><label class="vCheckboxLabel" for="id_status">Status</label>
+            </div>
+
+        </div>
+        {{ error }}<br>
+
+        {% csrf_token %}
+<input type="submit" value="保存" class="navbar-form navbar-left" name="_save" >
+
+</body>
+</html>
