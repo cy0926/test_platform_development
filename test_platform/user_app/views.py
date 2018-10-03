@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from user_app.models import ProjectManage
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # Create your views here.
@@ -14,8 +16,8 @@ def index(request):
 # 处理登录请求
 def login_action(request):
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+        username = request.POST.get("username", "")
+        password = request.POST.get("password", "")
 
         if username == "" or password == "":
             return render(request, 'index.html',
@@ -30,12 +32,38 @@ def login_action(request):
                 return HttpResponseRedirect("/project_manage/")
             else:
                 return render(request, "index.html", {"error": "用户名密码错误"})
+    else:
+        return render(request, "index.html")
 
 
+# 项目管理页面
 @login_required
 def project_manage(request):
     username = request.session.get('user1', '')  # 读取浏览器 cookies
-    return render(request, "project_manage.html", {"user": username})
+    # project_list = ProjectManage.objects.all()
+    project_list = ProjectManage.objects.get_queryset().order_by('id')
+    paginator = Paginator(project_list, 2)
+    # print(paginator.count)
+    page = request.GET.get("page")
+    try:
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        contacts = paginator.page(1)
+    except EmptyPage:
+        contacts = paginator.page(paginator.num_pages)
+    return render(request, "project_manage.html", {"user1": username,
+                                                   "projects": contacts})
+
+
+# 项目管理页面的搜索
+@login_required()
+def search(request):
+    if request.method == "GET":
+        search = request.GET.get("search", "")
+        search_list = ProjectManage.objects.filter(title__contains=search)
+        username = request.session.get('user1', '')  # 读取浏览器 cookies
+        return render(request, "project_manage.html", {"user1": username,
+                                                       "projects": search_list})
 
 
 def logout(request):

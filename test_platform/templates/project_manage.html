@@ -45,8 +45,9 @@
             <li><a href="#">{{ user }}</a></li>
             <li><a href="/logout/">退出</a></li>
           </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="搜索...">
+          <form class="navbar-form navbar-right" method="get" action="/search/">
+            <input name="search" type="text" class="form-control" placeholder="搜索...">
+
           </form>
         </div>
       </div>
@@ -68,9 +69,12 @@
             <li><a href="">测试工具</a></li>
           </ul>
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">项目列表</h1>
 
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+         <div>
+          <h1 class="sub-header">项目列表</h1>
+          <button type="submit" class="btn btn-primary" onclick="window.location.href='/add_project/'" style="margin-top: 8px;">添加项目</button>
+         </div>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -84,126 +88,89 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1,001</td>
-                  <td>Lorem</td>
-                  <td>ipsum</td>
-                  <td>dolor</td>
-                  <td>sit</td>
-                  <td>编辑</td>
-                  <td>删除</td>
-                </tr>
-                <tr>
-                  <td>1,002</td>
-                  <td>amet</td>
-                  <td>consectetur</td>
-                  <td>adipiscing</td>
-                  <td>elit</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>Integer</td>
-                  <td>nec</td>
-                  <td>odio</td>
-                  <td>Praesent</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>libero</td>
-                  <td>Sed</td>
-                  <td>cursus</td>
-                  <td>ante</td>
-                </tr>
-                <tr>
-                  <td>1,004</td>
-                  <td>dapibus</td>
-                  <td>diam</td>
-                  <td>Sed</td>
-                  <td>nisi</td>
-                </tr>
-                <tr>
-                  <td>1,005</td>
-                  <td>Nulla</td>
-                  <td>quis</td>
-                  <td>sem</td>
-                  <td>at</td>
-                </tr>
-                <tr>
-                  <td>1,006</td>
-                  <td>nibh</td>
-                  <td>elementum</td>
-                  <td>imperdiet</td>
-                  <td>Duis</td>
-                </tr>
-                <tr>
-                  <td>1,007</td>
-                  <td>sagittis</td>
-                  <td>ipsum</td>
-                  <td>Praesent</td>
-                  <td>mauris</td>
-                </tr>
-                <tr>
-                  <td>1,008</td>
-                  <td>Fusce</td>
-                  <td>nec</td>
-                  <td>tellus</td>
-                  <td>sed</td>
-                </tr>
-                <tr>
-                  <td>1,009</td>
-                  <td>augue</td>
-                  <td>semper</td>
-                  <td>porta</td>
-                  <td>Mauris</td>
-                </tr>
-                <tr>
-                  <td>1,010</td>
-                  <td>massa</td>
-                  <td>Vestibulum</td>
-                  <td>lacinia</td>
-                  <td>arcu</td>
-                </tr>
-                <tr>
-                  <td>1,011</td>
-                  <td>eget</td>
-                  <td>nulla</td>
-                  <td>Class</td>
-                  <td>aptent</td>
-                </tr>
-                <tr>
-                  <td>1,012</td>
-                  <td>taciti</td>
-                  <td>sociosqu</td>
-                  <td>ad</td>
-                  <td>litora</td>
-                </tr>
-                <tr>
-                  <td>1,013</td>
-                  <td>torquent</td>
-                  <td>per</td>
-                  <td>conubia</td>
-                  <td>nostra</td>
-                </tr>
-                <tr>
-                  <td>1,014</td>
-                  <td>per</td>
-                  <td>inceptos</td>
-                  <td>himenaeos</td>
-                  <td>Curabitur</td>
-                </tr>
-                <tr>
-                  <td>1,015</td>
-                  <td>sodales</td>
-                  <td>ligula</td>
-                  <td>in</td>
-                  <td>libero</td>
-                </tr>
+                {% for project in projects %}
+                  <tr>
+                    <td>{{ project.id }}</td>
+                    <td>{{ project.title }}</td>
+                    <td>{{ project.description }}</td>
+                    <td>{{ project.status }}</td>
+                    <td>{{ project.create_time }}</td>
+                    <td>
+                      <a>编辑</a>
+                      <a>删除</a>
+                    </td>
+                  </tr>
+
+                {% endfor %}
               </tbody>
+
             </table>
+            <!-- 列表分页器 -->
+               <div class="pagination">
+                  <span class="step-links">
+                    <ul class="pagination">
+                      {% if projects.has_previous %}
+                        <li><a href="?page={{ projects.previous_page_number }}">&laquo;</a></li>
+                      {% endif %}
+
+                       <li><a href="#">{{ projects.number }}</a></li>
+
+                      {% if projects.has_next %}
+                          <li><a href="?page={{ projects.next_page_number }}">&raquo;</a></li>
+                      {% endif %}
+                      <li><a href="#">共：{{ projects.paginator.num_pages }} 页</a></li>
+                    </ul>
+
+                      <!-- 尝试另一种分页样式
+                       <nav aria-label="Page navigation">
+                          <ul class="pagination">
+                            <li>
+                              <a href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                              </a>
+                            </li>
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li>
+                              <a href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                              </a>
+                            </li>
+                          </ul>
+                       </nav>
+                       -->
+
+                  </span>
+               </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!--
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+        <li>
+          <a href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li>
+        <a href="#" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+        </li>
+      </ul>
+    </nav>
+    -->
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -214,4 +181,5 @@
     <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
     <script src="https://v3.bootcss.com/assets/js/vendor/holder.min.js"></script>
   </body>
+
 </html>
