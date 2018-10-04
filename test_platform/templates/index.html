@@ -30,7 +30,7 @@
       <input type="text" name="username" id="inputEmail" class="form-control" placeholder="username" required>
       <label for="inputPassword" class="sr-only">Password</label>
       <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
-      {{ error }}<br>
+      <font size="3" color="red">{{error}}</font><br><br>
       {% csrf_token %}
       <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
     </form>

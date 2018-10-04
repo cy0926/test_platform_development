@@ -110,6 +110,40 @@ def delete_project(request, project_id):
     return response
 
 
+# 编辑项目页面
+def edit_project_page(request, project_id):
+    project = ProjectManage.objects.get(pk=project_id)
+    print(project)
+    edit_title = project.title
+    edit_description = project.description
+    edit_status = project.status
+    project_id = project.id
+    return render(request, 'edit_project_page.html',
+                  {"edit_title": edit_title,
+                   "edit_description": edit_description,
+                   "project_id": project_id,
+                   "edit_status": edit_status
+                   })
+
+
+# 编辑项目之后的提交操作
+def edit_project_action(request, project_id):
+    project = ProjectManage.objects.get(pk=project_id)
+    title = request.POST.get('title', '')
+    description = request.POST.get('description', '')
+    status = request.POST.get('status')
+    if status is True:
+        status = 1
+    else:
+        status = 0
+    project.title = title
+    project.description = description
+    project.status = status
+    project.save()
+    response = HttpResponseRedirect('/project_manage/')
+    return response
+
+
 def logout(request):
     auth.logout(request)
     response = HttpResponseRedirect('/')
