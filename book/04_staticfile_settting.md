@@ -1,6 +1,6 @@
 ### django设置本地静态文件(css/js/image)
 参考：https://docs.djangoproject.com/en/2.1/howto/static-files/
-1、setting.py文件设置
+>1、setting.py文件设置
 ```
 STATIC_URL = '/static/'
 
