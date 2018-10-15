@@ -2,10 +2,7 @@ from django.db import models
 
 
 # Create your models here.
-# ORM 创建数据库表
-# 操作数据 ORM 以编程的方式来定义操作数据库
 
-'''
 class ProjectManage(models.Model):
     """
     项目表
@@ -32,4 +29,3 @@ class Module(models.Model):
 
     def __str__(self):
         return self.title
-'''

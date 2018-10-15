@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from user_app.models import ProjectManage
+from project_app.models import ProjectManage
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -29,30 +29,11 @@ def login_action(request):
             if user is not None:
                 auth.login(request, user)  # 验证登录
                 request.session['user1'] = username
-                return HttpResponseRedirect("/project_manage/")
+                return HttpResponseRedirect("/manage/project_manage/")
             else:
                 return render(request, "index.html", {"error": "用户名密码错误"})
     else:
         return render(request, "index.html")
-
-
-# 项目管理页面
-@login_required
-def project_manage(request):
-    username = request.session.get('user1', '')  # 读取浏览器 cookies
-    # project_list = ProjectManage.objects.all()
-    project_list = ProjectManage.objects.get_queryset().order_by('id')
-    paginator = Paginator(project_list, 10)
-    # print(paginator.count)
-    page = request.GET.get("page")
-    try:
-        contacts = paginator.page(page)
-    except PageNotAnInteger:
-        contacts = paginator.page(1)
-    except EmptyPage:
-        contacts = paginator.page(paginator.num_pages)
-    return render(request, "project_manage.html", {"user1": username,
-                                                   "projects": contacts})
 
 
 # 项目管理页面的搜索(通过title搜索)
