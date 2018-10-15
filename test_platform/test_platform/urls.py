@@ -26,12 +26,12 @@ urlpatterns = [
     path('manage/', include('project_app.urls')),
     # path('project_manage/', views.project_manage),
     path('logout/', views.logout),
-    path('search/', views.search),
-    path('add_index/', views.add_index),
-    path('add_project/', views.add_project),
-    path('^delete/(?P<project_id>[0-9]+)/$', views.delete_project, name="delete"),
-    path('^edit_project_page/(?P<project_id>[0-9]+)/$', views.edit_project_page, name="edit_project_page"),
-    path('^edit_project_action/(?P<project_id>[0-9]+)/$', views.edit_project_action, name="edit_project_action")
+    # path('search/', views.search),
+    # path('add_index/', views.add_index),
+    # path('add_project/', views.add_project),
+    # path('^delete/(?P<project_id>[0-9]+)/$', views.delete_project, name="delete"),
+    # path('^edit_project_page/(?P<project_id>[0-9]+)/$', views.edit_project_page, name="edit_project_page"),
+    # path('^edit_project_action/(?P<project_id>[0-9]+)/$', views.edit_project_action, name="edit_project_action")
 
 
 ]

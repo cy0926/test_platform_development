@@ -45,7 +45,7 @@
             <li><a href="#">{{ user }}</a></li>
             <li><a href="/logout/">退出</a></li>
           </ul>
-          <form class="navbar-form navbar-right" method="get" action="/search/">
+          <form class="navbar-form navbar-right" method="get" action="/manage/search/">
             <input name="search" type="text" class="form-control" placeholder="搜索...">
 
           </form>
@@ -73,7 +73,7 @@
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
          <div>
           <h1 class="sub-header">项目列表</h1>
-          <button type="submit" class="btn btn-primary" onclick="window.location.href='/add_index/'" style="margin-top: 8px;">添加项目</button>
+          <button type="submit" class="btn btn-primary" onclick="window.location.href='/manage/add_index/'" style="margin-top: 8px;">添加项目</button>
          </div>
           <div class="table-responsive">
             <table class="table table-striped">
