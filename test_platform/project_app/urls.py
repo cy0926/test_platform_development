@@ -1,4 +1,4 @@
-#-*-coding:utf-8-*-
+# -*-coding:utf-8-*-
 from django.urls import path
 from project_app import views
 
@@ -11,4 +11,4 @@ urlpatterns = [
     path('^delete/(?P<project_id>[0-9]+)/$', views.delete_project, name="delete"),
     path('search/', views.search),
 
-    ]
+]
