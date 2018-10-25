@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from project_app.models import ProjectManage
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from project_app.forms import ProjectForm
 
 
 # Create your views here.
@@ -22,72 +23,54 @@ def project_manage(request):
     except EmptyPage:
         contacts = paginator.page(paginator.num_pages)
     return render(request, "project_manage.html", {"user1": username,
-                                                   "projects": contacts})
-
-
-# 添加项目页面
-def add_index(request):
-    return render(request, 'add_index.html')
+                                                   "projects": contacts,
+                                                   "type": "list"})
 
 
 # 添加项目操作
 def add_project(request):
-    # username = request.session.get('user1', '')  # 读取浏览器 cookies
-    if request.method == 'POST':
-        title = request.POST.get('title', '')
-        description = request.POST.get('description', '')
-        status = request.POST.get('status')
-        if status is True:
-            status = 1
-        else:
-            status = 0
-        if title == "" or description == "":
-            return render(request, "add_index.html",
-                          {"error": "名称和描述必填"}
-                          )
-        else:
+    if request.method == "POST":
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            description = form.cleaned_data['description']
+            status = form.cleaned_data['status']
             ProjectManage.objects.create(title=title, description=description, status=status)
-            response = HttpResponseRedirect('/manage/project_manage/')
-            return response
+            return HttpResponseRedirect('/manage/project_manage/')
+    else:
+        form = ProjectForm()
+
+    return render(request, 'project_manage.html',
+                  {'form': form,
+                   'type': "add"})
 
 
 # 编辑项目页面
-def edit_project_page(request, project_id):
-    project = ProjectManage.objects.get(pk=project_id)
-    print(project)
-    edit_title = project.title
-    edit_description = project.description
-    edit_status = project.status
-    project_id = project.id
-    return render(request, 'edit_project_page.html',
-                  {"edit_title": edit_title,
-                   "edit_description": edit_description,
-                   "project_id": project_id,
-                   "edit_status": edit_status
-                   })
-
-
-# 编辑项目之后的提交操作
-def edit_project_action(request, project_id):
-    project = ProjectManage.objects.get(pk=project_id)
-    title = request.POST.get('title', '')
-    description = request.POST.get('description', '')
-    status = request.POST.get('status')
-    if status is True:
-        status = 1
+def edit_project_page(request, pid):
+    if request.method == "POST":
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            project = ProjectManage.objects.get(id=pid)
+            project.title = form.cleaned_data['title']
+            project.description = form.cleaned_data['description']
+            project.status = form.cleaned_data['status']
+            project.save()
+            return HttpResponseRedirect('/manage/project_manage/')
     else:
-        status = 0
-    project.title = title
-    project.description = description
-    project.status = status
-    project.save()
-    response = HttpResponseRedirect('/manage/project_manage/')
-    return response
+        if pid:
+            form = ProjectForm(
+                instance=ProjectManage.objects.get(id=pid)
+            )
+    return render(request, 'project_manage.html',
+                  {'form': form,
+                   'type': "edit"
+                   }
+                  )
 
 
 # 删除项目
-def delete_project(request, project_id):
-    ProjectManage.objects.filter(id=project_id).delete()
+def delete_project(request, pid):
+    ProjectManage.objects.filter(id=pid).delete()
     response = HttpResponseRedirect('/manage/project_manage/')
     return response
 
