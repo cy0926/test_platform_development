@@ -36,8 +36,6 @@ def login_action(request):
         return render(request, "index.html")
 
 
-
-
 def logout(request):
     auth.logout(request)
     response = HttpResponseRedirect('/')

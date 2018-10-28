@@ -22,7 +22,7 @@ def project_manage(request):
         contacts = paginator.page(1)
     except EmptyPage:
         contacts = paginator.page(paginator.num_pages)
-    return render(request, "project_manage.html", {"user1": username,
+    return render(request, "project_manage.html", {"user": username,
                                                    "projects": contacts,
                                                    "type": "list"})
 
@@ -46,7 +46,7 @@ def add_project(request):
 
 
 # 编辑项目页面
-def edit_project_page(request, pid):
+def edit_project(request, pid):
     if request.method == "POST":
         form = ProjectForm(request.POST)
         if form.is_valid():

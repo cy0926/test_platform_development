@@ -1,7 +1,6 @@
 # -*-coding:utf-8-*-
 
 from django import forms
-from django.forms import ModelForm
 from .models import ProjectManage, Module
 
 
@@ -12,9 +11,12 @@ from .models import ProjectManage, Module
 
 
 class ProjectForm(forms.ModelForm):
-
     class Meta:
         model = ProjectManage
         fields = ['title', 'description', 'status']
 
 
+class ModuleForm(forms.ModelForm):
+    class Meta:
+        model = Module
+        exclude = ['create_time']

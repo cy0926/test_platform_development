@@ -10,7 +10,7 @@ class ProjectManage(models.Model):
     title = models.CharField("名称", max_length=100, blank=False, default="")  # 名称
     description = models.TextField("描述", max_length=100, default="")  # 描述
     status = models.BooleanField("status", default=True)  # 状态
-    create_time = models.DateTimeField("创建时间", auto_now=True)  # 创建时间
+    create_time = models.DateTimeField("创建时间", auto_now_add=True)  # 创建时间
 
     def __str__(self):
         return self.title
@@ -23,9 +23,8 @@ class Module(models.Model):
     """
     project = models.ForeignKey(ProjectManage, on_delete=models.CASCADE)
     title = models.CharField("名称", max_length=100, blank=False, default="")  # 名称
-    description = models.CharField("描述", max_length=100, default="")  # 描述
-    status = models.BooleanField("status", default=True)  # 状态
-    create_time = models.DateTimeField("创建时间", auto_now=True)  # 创建时间
+    description = models.TextField("描述", max_length=100, default="")  # 描述
+    create_time = models.DateTimeField("创建时间", auto_now_add=True)  # 创建时间
 
     def __str__(self):
         return self.title

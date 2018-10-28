@@ -31,8 +31,8 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"> <a href="#">项目管理</a></li>
-            <li><a href="/manage/module_manage/">模块管理</a></li>
+            <li> <a href="/manage/project_manage/">项目管理</a></li>
+            <li class="active"><a href="#">模块管理</a></li>
           </ul>
           <ul class="nav nav-sidebar">
             <li><a href="">用例管理</a></li>
@@ -47,8 +47,8 @@
         {% if type == 'list'%}
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
          <div>
-          <h1 class="sub-header">项目列表</h1>
-          <button type="submit" class="btn btn-primary" onclick="window.location.href='/manage/add_project/'" style="margin-top: 8px;">添加项目</button>
+          <h1 class="sub-header">模块列表</h1>
+          <button type="submit" class="btn btn-primary" onclick="window.location.href='/manage/add_module/'" style="margin-top: 8px;">添加模块</button>
          </div>
           <div class="table-responsive">
             <table class="table table-striped">
@@ -57,22 +57,22 @@
                   <th>id</th>
                   <th>名称</th>
                   <th>描述</th>
-                  <th>状态</th>
+                  <th>项目</th>
                   <th>创建时间</th>
                   <th>操作</th>
                 </tr>
               </thead>
               <tbody>
-                {% for project in projects %}
+                {% for module in modules %}
                   <tr>
-                    <td>{{ project.id }}</td>
-                    <td>{{ project.title }}</td>
-                    <td>{{ project.description }}</td>
-                    <td>{{ project.status }}</td>
-                    <td>{{ project.create_time | date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ module.id }}</td>
+                    <td>{{ module.title }}</td>
+                    <td>{{ module.description }}</td>
+                    <td>{{ module.project }}</td>
+                    <td>{{ module.create_time | date:"Y-m-d H:i:s" }}</td>
                     <td>
-                      <a href="/manage/edit_project/{{project.id}}/">编辑</a>&ensp;
-                      <a href="/manage/delete_project/{{project.id}}/">删除</a>
+                      <a href="/manage/edit_module/{{module.id}}/">编辑</a>&ensp;
+                      <a href="/manage/delete_module/{{module.id}}/">删除</a>
                     </td>
                   </tr>
 
@@ -84,20 +84,20 @@
                <div class="pagination">
                   <span class="step-links">
                     <ul class="pagination">
-                      {% if projects.has_previous %}
-                        <li><a href="?search={{ search }}&page={{ projects.previous_page_number }}">&laquo;</a></li>
+                      {% if modules.has_previous %}
+                        <li><a href="?search={{ search }}&page={{ modules.previous_page_number }}">&laquo;</a></li>
                       {% endif %}
 
-                       <li><a href="#">{{ projects.number }}</a></li>
+                       <li><a href="#">{{ modules.number }}</a></li>
 
-                      {% if projects.has_next %}
+                      {% if modules.has_next %}
                         {% if search %}
-                           <li><a href="?search={{ search }}&page={{ projects.next_page_number }}">&raquo;</a></li>
+                           <li><a href="?search={{ search }}&page={{ modules.next_page_number }}">&raquo;</a></li>
                         {% else %}
-                           <li><a href="?page={{ projects.next_page_number }}">&raquo;</a></li>
+                           <li><a href="?page={{ modules.next_page_number }}">&raquo;</a></li>
                         {% endif %}
                       {% endif %}
-                      <li><a href="#">共：{{ projects.paginator.num_pages }} 页</a></li>
+                      <li><a href="#">共：{{ modules.paginator.num_pages }} 页</a></li>
                     </ul>
 
                       <!-- 尝试另一种分页样式
@@ -131,20 +131,17 @@
 
       {% if type == 'add' %}
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-           <h3 class="sub-header">添加项目
-                <button class="btn btn-primary" onclick="window.location.href='/manage/project_manage/'" style="margin-left: 180px;">取消
-                </button>
-           </h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="table-responsive">
-          <form action="/manage/add_project/" method="post">
+         <div>
+          <h1 class="sub-header">创建模块
+              <button class="btn btn-primary"
+                      onclick="window.location.href='/manage/project_manage/'"
+                         style="margin-left: 180px;">取消
+              </button>
+          </h1>
+          <form action="/manage/add_module/" method="post">
               {% csrf_token %}
               {{form.as_p}}
           <button type="submit" class="btn btn-primary" style="margin-top: 8px;">确定</button>
-          <!--
-          <button type="submit" class="btn btn-primary" onclick="window.location.href='/manage/project_manage/'" style="margin-top: 8px;">取消</button>
-          -->
           </form>
          </div>
       </div>
@@ -153,7 +150,7 @@
 
       {% if type == 'edit' %}
        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                <h3 class="sub-header">编辑项目
+                <h3 class="sub-header">编辑模块
                     <button class="btn btn-primary"
                             onclick="window.location.href='/manage/project_manage/'"
                             style="margin-left: 180px;">取消
@@ -165,9 +162,6 @@
                         {% csrf_token %}
                         {{ form.as_p }}
                         <button type="submit" class="btn btn-primary" style="margin-top: 8px;">确定</button>
-                        <!--
-                        <button type="submit" class="btn btn-primary" onclick="window.location.href='/manage/project_manage/'" style="margin-top: 8px;">取消</button>
-                        -->
                     </form>
                 </div>
        </div>

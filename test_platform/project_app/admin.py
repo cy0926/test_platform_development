@@ -11,7 +11,7 @@ class ProjectManageAdmin(admin.ModelAdmin):
 
 
 class ModuleAdmin(admin.ModelAdmin):
-    list_display = ['title', 'description', 'status', 'create_time', 'project']
+    list_display = ['title', 'description', 'create_time', 'project']
 
 
 admin.site.register(ProjectManage, ProjectManageAdmin)
