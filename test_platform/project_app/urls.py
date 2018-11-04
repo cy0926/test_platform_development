@@ -7,7 +7,7 @@ urlpatterns = [
     path('project_manage/', project_views.project_manage),
     path('add_project/', project_views.add_project),
     path('edit_project/<int:pid>/', project_views.edit_project, name="edit_project_page"),
-    path('delete_project/<int:pid>', project_views.delete_project, name="delete"),
+    path('delete_project/<int:pid>/', project_views.delete_project, name="delete"),
     path('search/', project_views.search),
 
     # 模块管理
