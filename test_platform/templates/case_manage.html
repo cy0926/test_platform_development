@@ -1,10 +1,164 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <h1>这是用例管理页面</h1>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
 
-</body>
-</html>
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">测试平台</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">{{ user }}</a></li>
+            <li><a href="/logout/">退出</a></li>
+          </ul>
+          <form class="navbar-form navbar-right" method="get" action="/manage/search/">
+            <input name="search" type="text" class="form-control" placeholder="搜索...">
+
+          </form>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li> <a href="/manage/project_manage/">项目管理</a></li>
+            <li><a href="/manage/module_manage/">模块管理</a></li>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">用例管理</a></li>
+            <li><a href="">任务管理</a></li>
+          </ul>
+          <ul class="nav nav-sidebar">
+            <li><a href="">MockServer</a></li>
+            <li><a href="">测试工具</a></li>
+          </ul>
+        </div>
+
+        {% if type == 'list'%}
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+         <div>
+          <h1 class="sub-header">用例列表</h1>
+              <button type="submit" class="btn btn-primary"
+                      onclick="window.location.href='/interface/debug/'" style="margin-top: 8px;">调试</button>
+         </div>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>id</th>
+                  <th>名称</th>
+                  <th>描述</th>
+                  <th>状态</th>
+                  <th>创建时间</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for project in projects %}
+                  <tr>
+                    <td>{{ project.id }}</td>
+                    <td>{{ project.title }}</td>
+                    <td>{{ project.description }}</td>
+                    <td>{{ project.status }}</td>
+                    <td>{{ project.create_time | date:"Y-m-d H:i:s" }}</td>
+                    <td>
+                      <a href="/manage/edit_project/{{project.id}}/">编辑</a>&ensp;
+                      <a href="/manage/delete_project/{{project.id}}/">删除</a>
+                    </td>
+                  </tr>
+
+                {% endfor %}
+              </tbody>
+
+            </table>
+            <!-- 列表分页器 -->
+               <div class="pagination">
+                  <span class="step-links">
+                    <ul class="pagination">
+                      {% if projects.has_previous %}
+                        <li><a href="?search={{ search }}&page={{ projects.previous_page_number }}">&laquo;</a></li>
+                      {% endif %}
+
+                       <li><a href="#">{{ projects.number }}</a></li>
+
+                      {% if projects.has_next %}
+                        {% if search %}
+                           <li><a href="?search={{ search }}&page={{ projects.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                           <li><a href="?page={{ projects.next_page_number }}">&raquo;</a></li>
+                        {% endif %}
+                      {% endif %}
+                      <li><a href="#">共：{{ projects.paginator.num_pages }} 页</a></li>
+                    </ul>
+                  </span>
+               </div>
+          </div>
+        </div>
+      {% endif %}
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+         <div class="row">
+           {% block  api_debug%}
+
+           {% endblock %}
+         </div>
+      </div>
+
+<!--
+      {% if type == 'add' %}
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+           <h3 class="sub-header">添加项目
+                <button class="btn btn-primary" onclick="window.location.href='/manage/project_manage/'" style="margin-left: 180px;">取消
+                </button>
+           </h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+          <form action="/manage/add_project/" method="post">
+              {% csrf_token %}
+              {{form.as_p}}
+          <button type="submit" class="btn btn-primary" style="margin-top: 8px;">确定</button>
+
+
+          </form>
+         </div>
+      </div>
+      {% endif %}
+    </div>
+
+      {% if type == 'edit' %}
+       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <h3 class="sub-header">编辑项目
+                    <button class="btn btn-primary"
+                            onclick="window.location.href='/manage/project_manage/'"
+                            style="margin-left: 180px;">取消
+                    </button>
+                </h3>
+
+                <div class="table-responsive">
+                    <form role="form" method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary" style="margin-top: 8px;">确定</button>
+
+                    </form>
+                </div>
+       </div>
+      {% endif %}
+
+ -->
+           </div>
+      </div>
+    </div>
+
+{% endblock %}
+
