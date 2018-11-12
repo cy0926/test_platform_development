@@ -17,7 +17,7 @@ class TestCase(models.Model):
     req_header = models.TextField("header", default="")
     req_parameter = models.TextField("参数", default="")
     response_assert = models.TextField("断言", default="")
-    creat_time = models.DateTimeField("创建时间", auto_now_add=True)
+    create_time = models.DateTimeField("创建时间", auto_now_add=True)
 
     def __str__(self):
         return self.name

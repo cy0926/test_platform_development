@@ -6,7 +6,7 @@ from interface_app.models import TestCase
 
 class TestCaseAdmin(admin.ModelAdmin):
     list_display = ["module", "name", "url", "req_method", "req_type",
-                    "req_header", "req_parameter", "response_assert", "creat_time"]
+                    "req_header", "req_parameter", "response_assert", "create_time"]
 
 
 admin.site.register(TestCase, TestCaseAdmin)

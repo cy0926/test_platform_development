@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from interface_app.models import TestCase
 from project_app.models import ProjectManage, Module
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # 获取项目，模块列表
@@ -28,15 +29,22 @@ def get_project_list(request):
 
 # 用例管理页面
 def case_manage(request):
-    if request.method == "GET":
-        return render(request, "case_manage.html",
-                      {"type": "list"}
-                      )
-    else:
-        return HttpResponse("404")
+    cases_list = TestCase.objects.get_queryset().order_by('id')
+    paginator = Paginator(cases_list, 10)
+    page = request.GET.get("page")
+    try:
+        contacts = paginator.page(page)
+
+    except PageNotAnInteger:
+        contacts = paginator.page(1)
+    except EmptyPage:
+        contacts = paginator.page(paginator.num_pages)
+    return render(request, "case_manage.html",
+                  {"cases": contacts,
+                   "type": "list"})
 
 
-# 用例列表--点击“调试”按钮
+# 用例列表--点击“添加用例”按钮
 def debug(request):
     if request.method == "GET":
         return render(request, "api_debug.html")
@@ -103,9 +111,14 @@ def save_case(request):
 
         module_obj = Module.objects.get(title=module_name)
         case = TestCase.objects.create(name=name, module=module_obj, url=url, req_method=method,
-                                       req_type=req_type, req_header=header,req_parameter=parameter)
+                                       req_type=req_type, req_header=header, req_parameter=parameter)
         if case is not None:
             return HttpResponse("保存成功")
 
     else:
         return HttpResponse("404")
+
+
+# 编辑用例
+def edit_case(request, case_id):
+    pass
