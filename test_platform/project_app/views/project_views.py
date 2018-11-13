@@ -63,9 +63,7 @@ def edit_project(request, pid):
             )
     return render(request, 'project_manage.html',
                   {'form': form,
-                   'type': "edit"
-                   }
-                  )
+                   'type': "edit"})
 
 
 # 删除项目
@@ -94,4 +92,5 @@ def search(request):
 
         return render(request, "project_manage.html", {"user1": username,
                                                        "projects": contacts,
-                                                       "search": search})
+                                                       "search": search,
+                                                       "type": "list"})

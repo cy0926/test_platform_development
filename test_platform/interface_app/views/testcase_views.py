@@ -1,10 +1,12 @@
 import json
 import requests
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from interface_app.models import TestCase
 from project_app.models import ProjectManage, Module
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from interface_app.forms import TestCaseForm
+from project_app.forms import ProjectForm, ModuleForm
 
 
 # 获取项目，模块列表
@@ -52,7 +54,7 @@ def debug(request):
         return HttpResponse("404")
 
 
-# 调试
+# 调试页面
 def api_debug(request):
     if request.method == 'POST':
         name = request.POST.get("name", "")
@@ -69,11 +71,13 @@ def api_debug(request):
 
         if header == "":
             header = "{}"
+        else:
+            header = json.loads(header.replace("'", "\""))
 
         if method == "get":
             r = requests.get(url, params=parameter)
         if method == "post":
-            r = requests.post(url, json=parameter)
+            r = requests.post(url, json=parameter, headers=header)
 
         return HttpResponse(r.text)
 
@@ -82,16 +86,6 @@ def api_debug(request):
 def save_case(request):
     """
     保存用例
-    :param request:
-    :return:
-
-
-    "name": name,
-    "req_url" :url,
-    "req_method" : method,
-    "req_parameter": parameter,
-    "req_type": req_type,
-    "header": header,
     """
     if request.method == "POST":
         name = request.POST.get("name", "")
@@ -118,7 +112,53 @@ def save_case(request):
     else:
         return HttpResponse("404")
 
+    # url = models.TextField("URL", default="")
+    # req_method = models.CharField("方法", max_length=10, default="")
+    # req_type = models.CharField("参数类型", max_length=10, default="")
+    # req_header = models.TextField("header", default="")
+    # req_parameter = models.TextField("参数", default="")
+    # response_assert = models.TextField("断言", default="")
+    # create_time = models.DateTimeField("创建时间", auto_now_add=True)
+
 
 # 编辑用例
 def edit_case(request, case_id):
-    pass
+    if request.method == "POST":
+        form = TestCaseForm(request.POST)
+        if form.is_valid():
+            case = TestCase.objects.get(id=case_id)
+            case.name = form.cleaned_data['name']
+            case.url = form.cleaned_data['url']
+    else:
+        if case_id:
+            form = TestCaseForm(
+                instance=TestCase.objects.get(id=case_id)
+            )
+    return render(request, 'case_manage.html', {'form': form,
+                                                'type': 'edit'})
+
+
+# 用例搜索
+def search_case_name(request):
+    if request.method == "GET":
+        # 获取搜索关键字
+        search = request.GET.get("case_name", "")
+        search_list = TestCase.objects.filter(name__contains=search)
+        paginator = Paginator(search_list, 10)
+        # 获取当前页码
+        page = request.GET.get("page")
+        try:
+            contacts = paginator.page(page)
+        except PageNotAnInteger:
+            contacts = paginator.page(1)
+        except EmptyPage:
+            contacts = paginator.page(paginator.num_pages)
+        return render(request, "case_manage.html", {'cases': contacts,
+                                                    'type': "list",
+                                                    'search': search})
+
+
+# 删除用例
+def delete_case(request, case_id):
+    TestCase.objects.filter(id=case_id).delete()
+    return HttpResponseRedirect('/interface/case_manage/')
