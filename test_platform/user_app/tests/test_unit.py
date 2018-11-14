@@ -28,6 +28,7 @@ class UserTestCase(TestCase):
         user.save()
         self.assertEqual(user.username, "test02")
 
+
 # 运行测试的时候，不会真的调用数据库里面的数据
 
 
@@ -71,7 +72,18 @@ class LoginActionTest(TestCase):
         response = self.client.post('/login_action/', data=login_data)
         self.assertEqual(response.status_code, 302)
 
+
+class LogoutTest(TestCase):
+    """测试退出"""
+
+    def setUp(self):
+        User.objects.create_user("test01", "test01@mail.com", "test123456")
+        self.client = Client()
+        login_data = {"username": "test01", "password": "test123456"}
+        response = self.client.post('/login_action/', data=login_data)
+        print(response.content)
+        print(response.status_code)
+
     def test_logout(self):
-        """测试退出"""
         response = self.client.get('/logout/')
         self.assertEqual(response.status_code, 302)

@@ -8,12 +8,12 @@
     <form class="form-signin" method="post" action="/login_action/">
       <h2 class="form-signin-heading">测试平台</h2>
       <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="text" name="username" id="inputEmail" class="form-control" placeholder="username" required>
+      <input type="text" name="username" id="inputEmail" class="form-control" placeholder="username">
       <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
-      <font size="3" color="red">{{error}}</font><br><br>
+      <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password">
+      <font size="3" color="red" id="error">{{error}}</font><br><br>
       {% csrf_token %}
-      <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+      <button class="btn btn-lg btn-primary btn-block" id="LoginButton" type="submit">登录</button>
     </form>
 
   </div> <!-- /container -->

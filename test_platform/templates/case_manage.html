@@ -105,7 +105,7 @@
 
                        <li><a href="#">{{ cases.number }}</a></li>
 
-                      {% if projects.has_next %}
+                      {% if cases.has_next %}
                         {% if search %}
                            <li><a href="?search={{ search }}&page={{ cases.next_page_number }}">&raquo;</a></li>
                         {% else %}

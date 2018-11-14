@@ -36,6 +36,7 @@ def login_action(request):
         return render(request, "index.html")
 
 
+@login_required
 def logout(request):
     auth.logout(request)
     response = HttpResponseRedirect('/')

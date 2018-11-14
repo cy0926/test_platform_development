@@ -74,7 +74,7 @@ def delete_project(request, pid):
 
 
 # 项目管理页面的搜索(通过title搜索)
-@login_required()
+@login_required
 def search(request):
     if request.method == "GET":
         username = request.session.get('user1', '')  # 读取浏览器 cookies
