@@ -47,14 +47,19 @@ def case_manage(request):
 
 
 # 用例列表--点击“添加用例”按钮
-def debug(request):
+def add_case(request):
     if request.method == "GET":
-        return render(request, "api_debug.html")
+        # 这里的form表单应该暂时没用到
+        form = TestCaseForm()
+        return render(request, "add_case.html", {
+            "form": form,
+            "type": "add"
+        })
     else:
         return HttpResponse("404")
 
 
-# 调试页面
+# 添加/编辑用例的“调试”按钮
 def api_debug(request):
     if request.method == 'POST':
         name = request.POST.get("name", "")
@@ -112,30 +117,42 @@ def save_case(request):
     else:
         return HttpResponse("404")
 
-    # url = models.TextField("URL", default="")
-    # req_method = models.CharField("方法", max_length=10, default="")
-    # req_type = models.CharField("参数类型", max_length=10, default="")
-    # req_header = models.TextField("header", default="")
-    # req_parameter = models.TextField("参数", default="")
-    # response_assert = models.TextField("断言", default="")
-    # create_time = models.DateTimeField("创建时间", auto_now_add=True)
 
-
-# 编辑用例
+# 用例列表--针对单个用例的“调试”功能
 def edit_case(request, case_id):
-    if request.method == "POST":
+    if request.method == "GET":
+        # 这里的form表单应该暂时没用到
         form = TestCaseForm(request.POST)
-        if form.is_valid():
-            case = TestCase.objects.get(id=case_id)
-            case.name = form.cleaned_data['name']
-            case.url = form.cleaned_data['url']
+        return render(request, 'debug_case.html',
+                      {'form': form,
+                       'type': 'edit'})
     else:
-        if case_id:
-            form = TestCaseForm(
-                instance=TestCase.objects.get(id=case_id)
-            )
-    return render(request, 'case_manage.html', {'form': form,
-                                                'type': 'edit'})
+        return HttpResponse('404')
+
+
+# 获取用例信息的接口
+def get_case_info(request):
+    if request.method == "POST":
+        case_id = request.POST.get("caseId", "")
+        print(case_id)
+        if case_id == "":
+            return JsonResponse({"success": "false",
+                                 "message": "case_id is null."})
+        case_obj = TestCase.objects.get(id=case_id)
+        case_info = {
+            "name": case_obj.name,
+            "url": case_obj.url,
+            "req_method": case_obj.req_method,
+            "req_type": case_obj.req_type,
+            "req_header": case_obj.req_header,
+            "req_parameter": case_obj.req_parameter,
+        }
+        return JsonResponse({"success": "true",
+                             "message": "ok",
+                             "data": case_info})
+
+    else:
+        return HttpResponse('404')
 
 
 # 用例搜索
