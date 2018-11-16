@@ -83,13 +83,16 @@
                   // 初始化菜单
                 ProjectInit('project_name', 'module_name');
 
-                // 获取当前请求地址的路径，eg:/interface/case/1/
+                // 获取当前请求地址的路径，eg:/interface/edit_case/1/
             　　var uri = document.location.pathname;
                var path_list = uri.split('/')
                var case_id = path_list[3]
+               var path_name = path_list[2]
+               console.log('uri:',uri)
+               console.log('path:', path_name)
                console.log('case_id',case_id)
                 // 调用获取用例信息的方法
-                CaseInit(case_id)
+               CaseInit(case_id)
 
                 $(document).ready(function(){
                   $("#send").click(function(){

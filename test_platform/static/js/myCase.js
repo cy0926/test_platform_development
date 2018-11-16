@@ -19,9 +19,13 @@ var CaseInit = function (case_id) {
                 if (dataList.req_method == "post"){
                     document.getElementById("post").setAttribute("checked", "")
                 }
+                if (dataList.req_type == "json"){
+                    document.getElementById("json").setAttribute("checked", "")
+                }
 
             }else{
                 window.alert("用例的id不存在")
+
             }
         });
     }

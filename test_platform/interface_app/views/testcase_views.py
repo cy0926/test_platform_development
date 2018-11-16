@@ -119,7 +119,7 @@ def save_case(request):
 
 
 # 用例列表--针对单个用例的“调试”功能
-def edit_case(request, case_id):
+def debug_case(request, case_id):
     if request.method == "GET":
         # 这里的form表单应该暂时没用到
         form = TestCaseForm(request.POST)
@@ -127,6 +127,7 @@ def edit_case(request, case_id):
                       {'form': form,
                        'type': 'edit'})
     else:
+
         return HttpResponse('404')
 
 
