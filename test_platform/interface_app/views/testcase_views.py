@@ -140,7 +140,22 @@ def get_case_info(request):
             return JsonResponse({"success": "false",
                                  "message": "case_id is null."})
         case_obj = TestCase.objects.get(id=case_id)
+
+        print("模块id：%s" % case_obj.module_id)
+        mid = case_obj.module_id
+
+        module_obj = Module.objects.get(id=mid)
+        module_name = module_obj.title
+
+        pid = module_obj.project_id
+        print("项目id:%s" % pid)
+
+        project_obj = ProjectManage.objects.get(id=pid)
+        project_name = project_obj.title
+
         case_info = {
+            "module_name": module_name,
+            "project_name": project_name,
             "name": case_obj.name,
             "url": case_obj.url,
             "req_method": case_obj.req_method,

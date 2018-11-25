@@ -23,6 +23,8 @@ var CaseInit = function (case_id) {
                     document.getElementById("json").setAttribute("checked", "")
                 }
 
+                //初始化菜单
+                ProjectInit('project_name', 'module_name', dataList.project_name, dataList.module_name)
             }else{
                 window.alert("用例的id不存在")
 
