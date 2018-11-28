@@ -64,11 +64,21 @@
                 <input id="req_parameter" type="text" class="form-control">
             </div>
             <p style="color:#8B8989">说明：以字典的方式设置参数，如：{"id":1, "name":"名称"}</p>
-            <div style="width: 100%; height: 60px;">
-                <button type="button" class="btn btn-success" id="send" style="float: right;margin-right: 10px;">调试</button>
-                <button type="button" class="btn btn-success" id="save" style="float: right;margin-right: 10px;">保存</button>
+
+             <p>验证数据：</p>
+            <div style="height: 100px">
+                <div style="float: left; width: 80%;">
+                    <textarea id="assert_text" class="form-control" rows="3" name=textarea style="height:114px;"></textarea>
+                </div>
+                <div style="margin-top: 38px; float: right; width: 10%;">
+                    <button type="button" class="btn btn-default" id="assert" style="float: right;margin-right: 10px;">验证</button>
+                </div>
             </div>
 
+            <div style="width: 100%; height: 60px;">
+                <button type="button" class="btn btn-success" id="send" style="float: right;margin-right: 10px;">调试</button>
+                <button type="button" class="btn btn-primary" id="update" style="float: right;margin-right: 10px;">更新</button>
+            </div>
         </form>
 
         </div>
@@ -143,13 +153,13 @@
                         var req_type = $('input[name="req_type"]:checked').val();
                         var module_name = $('select[id="module_name"]').val();
                         var header = $('#req_header').val();
-                        console.log("名称",name);
-                        console.log("url",url);
-                        console.log("method",method);
-                        console.log("类型",req_type);
-                        console.log("参数",parameter);
-                        console.log("header",header);
-                        console.log("模块名称",module_name);
+                        // console.log("名称",name);
+                        // console.log("url",url);
+                        // console.log("method",method);
+                        // console.log("类型",req_type);
+                        // console.log("参数",parameter);
+                        // console.log("header",header);
+                        // console.log("模块名称",module_name);
                         if (name ===''){
                           window.alert("请求的名称不能为空");
                         }
@@ -175,6 +185,23 @@
 
                         });
 
+                    });
+
+                    // 验证数据接口
+                    $("#assert").click(function(){
+                        var result = $("result").val()
+                        var assert = $("assert_text").val()
+                        if (result === "" || assert === ""){
+                            window.alert("验证数据不能为空！");
+                        }
+
+                        //发送“验证”的post请求
+                        $.post("/interface/api_aasert/",{
+                            "result":result,
+                            "assert":assert,
+                        },function (resp) {
+                            window.alert(resp.message)
+                        });
                     });
 
 
