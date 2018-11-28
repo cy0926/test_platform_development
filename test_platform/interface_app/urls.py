@@ -12,6 +12,8 @@ urlpatterns = [
     path('debug_case/<int:case_id>/', testcase_views.debug_case),
     path('search_case_name/', testcase_views.search_case_name),
     path('delete_case/<int:case_id>/', testcase_views.delete_case),
-    path('get_case_info/', testcase_views.get_case_info)
+    path('get_case_info/', testcase_views.get_case_info),
+    path('api_assert/', testcase_views.api_assert),
+    path('update_case/', testcase_views.update_case),
 
 ]

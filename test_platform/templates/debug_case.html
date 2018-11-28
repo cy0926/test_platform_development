@@ -97,13 +97,15 @@
             　 var uri = document.location.pathname;
                var path_list = uri.split('/')
                var case_id = path_list[3]
-               var path_name = path_list[2]
-               console.log('uri:',uri)
-               console.log('path:', path_name)
-               console.log('case_id',case_id)
-                // 调用获取用例信息的方法
+               // var path_name = path_list[2]
+               // console.log('uri:',uri)
+               // console.log('path:', path_name)
+               // console.log('case_id',case_id)
+
+               // 调用获取用例信息的方法
                CaseInit(case_id)
 
+               // 点击“调试”按钮
                 $(document).ready(function(){
                   $("#send").click(function(){
                     //console.log('aaaaa')
@@ -113,21 +115,20 @@
                       var parameter = $('#req_parameter').val();
                       var req_type = $('input[name="req_type"]:checked').val();
                       var header = $('#req_header').val();
-                      console.log("名称",name);
-                      console.log("url",url);
-                      console.log("method",method);
-                      console.log("类型",req_type);
-                      console.log("参数",parameter);
-                      console.log("header",header);
+
                       if (name ===''){
                          window.alert("请求的名称不能为空");
+                         return;
                       }
                       else if (url === ''){
                           window.alert("请求的url不能为空");
+                          return;
                       }else if(method === ''){
                           window.alert("请求的方法不能为空");
+                          return;
                       }else if(parameter ===''){
                           parameter = "{}";
+                          return;
                       }
                       //发送post请求
                       $.post('/interface/api_debug/',{
@@ -138,14 +139,15 @@
                           "req_type": req_type,
                           "header": header
                       },function (resp) {
-                          console.log('success', resp);
+                          // console.log('success', resp);
                           $('#result').html(resp);
                       });
                   });
 
 
-                  //保存用例
-                    $("#save").click(function () {
+                  //更新用例
+                    $("#update").click(function () {
+
                         var name = $('#req_name').val();
                         var url = $('#req_url').val();
                         var method = $('input[name="req_method"]:checked').val();
@@ -153,13 +155,8 @@
                         var req_type = $('input[name="req_type"]:checked').val();
                         var module_name = $('select[id="module_name"]').val();
                         var header = $('#req_header').val();
-                        // console.log("名称",name);
-                        // console.log("url",url);
-                        // console.log("method",method);
-                        // console.log("类型",req_type);
-                        // console.log("参数",parameter);
-                        // console.log("header",header);
-                        // console.log("模块名称",module_name);
+                        var assert_text = $('#assert_text').val();
+
                         if (name ===''){
                           window.alert("请求的名称不能为空");
                         }
@@ -171,14 +168,16 @@
                           parameter = "{}";
                         }
                         // 发送post请求
-                        $.post('/interface/save_case/',{
+                        $.post('/interface/update_case/',{
+                            "cid":case_id,
                             "name": name,
                             "req_url" :url,
                             "req_method" : method,
                             "req_parameter": parameter,
                             "req_type": req_type,
                             "header": header,
-                            "module": module_name
+                            "module": module_name,
+                            "assert_text":assert_text
                         },function(resp){
                             $("#result").html(resp)
                             window.alert(resp)
@@ -189,14 +188,15 @@
 
                     // 验证数据接口
                     $("#assert").click(function(){
-                        var result = $("result").val()
-                        var assert = $("assert_text").val()
+                        var result = $("#result").val();
+                        var assert = $("#assert_text").val();
+
                         if (result === "" || assert === ""){
                             window.alert("验证数据不能为空！");
                         }
 
                         //发送“验证”的post请求
-                        $.post("/interface/api_aasert/",{
+                        $.post("/interface/api_assert/",{
                             "result":result,
                             "assert":assert,
                         },function (resp) {

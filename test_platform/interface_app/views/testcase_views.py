@@ -171,6 +171,42 @@ def get_case_info(request):
         return HttpResponse('404')
 
 
+# 用例调试--点击“验证”按钮
+def api_assert(request):
+    if request.method == "POST":
+        result_text = request.POST.get("result", "")
+        assert_text = request.POST.get("assert", "")
+        if result_text == "" or assert_text == "":
+            return JsonResponse({"success": "false",
+                                 "message": "验证的数据不能为空"
+                                 })
+        try:
+            assert assert_text in result_text
+        except AssertionError:
+            return JsonResponse({"success": "false",
+                                 "message": "验证失败！"})
+        else:
+            return JsonResponse({"success": "true",
+                                 "message": "验证成功"})
+    else:
+        return HttpResponse('请求方法错误')
+
+
+# 用例调试--点击“更新”按钮
+def update_case(request):
+    if request.method == "POST":
+        case_id = request.POST.get("cid", "")
+        name = request.POST.get("name", "")
+        url = request.POST.get("req_url", "")
+        method = request.POST.get("req_method", "")
+        parameter = request.POST.get("req_parameter", "")
+        req_type = request.POST.get("req_type", "")
+        header = request.POST.get("header", "")
+        module_name = request.POST.get("module", "")
+        assert_text = request.POST.get("assert_text", "")
+        print("用例id:",case_id)
+
+
 # 用例搜索
 def search_case_name(request):
     if request.method == "GET":
