@@ -15,6 +15,8 @@ var CaseInit = function (case_id) {
                 document.getElementById("req_url").value = dataList.url;
                 document.getElementById("req_header").value = dataList.req_header;
                 document.getElementById("req_parameter").value = dataList.req_parameter;
+                document.getElementById("assert_text").value = dataList.assertText;
+                // window.alert(dataList.assertText)
                 //console.log('请求方法：',dataList.req_method)
                 if (dataList.req_method == "post"){
                     document.getElementById("post").setAttribute("checked", "")

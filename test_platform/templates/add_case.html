@@ -64,6 +64,18 @@
                 <input id="req_parameter" type="text" class="form-control">
             </div>
             <p style="color:#8B8989">说明：以字典的方式设置参数，如：{"id":1, "name":"名称"}</p>
+
+            <p>验证数据：</p>
+            <div style="height: 100px">
+                <div style="float: left; width: 80%;">
+                    <textarea id="assert_text" class="form-control" rows="3" name=textarea style="height:114px;"></textarea>
+                </div>
+                <div style="margin-top: 38px; float: right; width: 10%;">
+                    <button type="button" class="btn btn-default" id="assert" style="float: right;margin-right: 10px;">验证</button>
+                </div>
+            </div>
+
+
             <div style="width: 100%; height: 60px;">
                 <button type="button" class="btn btn-success" id="send" style="float: right;margin-right: 10px;">调试</button>
                 <button type="button" class="btn btn-success" id="save" style="float: right;margin-right: 10px;">保存</button>
@@ -83,6 +95,10 @@
                   // 初始化菜单
                 ProjectInit('project_name', 'module_name');
 
+                // 设置header 与参数输入框的默认值
+                document.querySelector('#req_header').value = "{}";
+                document.querySelector('#req_parameter').value = "{}";
+
                 $(document).ready(function(){
                   $("#send").click(function(){
                     //console.log('aaaaa')
@@ -92,12 +108,7 @@
                       var parameter = $('#req_parameter').val();
                       var req_type = $('input[name="req_type"]:checked').val();
                       var header = $('#req_header').val();
-                      console.log("名称",name);
-                      console.log("url",url);
-                      console.log("method",method);
-                      console.log("类型",req_type);
-                      console.log("参数",parameter);
-                      console.log("header",header);
+
                       if (name ===''){
                          window.alert("请求的名称不能为空");
                       }
@@ -108,7 +119,7 @@
                       }else if(parameter ===''){
                           parameter = "{}";
                       }
-                      //发送post请求
+                      //"调试"按钮-发送post请求
                       $.post('/interface/api_debug/',{
                           "name": name,
                           "req_url":url,
@@ -117,8 +128,11 @@
                           "req_type": req_type,
                           "header": header
                       },function (resp) {
-                          console.log('success', resp);
-                          $('#result').html(resp);
+                          if (resp.success === "true"){
+                            $('#result').html(resp.data);
+                          }else {
+                              window.alert(resp.message);
+                          }
                       });
                   });
 
@@ -132,13 +146,8 @@
                         var req_type = $('input[name="req_type"]:checked').val();
                         var module_name = $('select[id="module_name"]').val();
                         var header = $('#req_header').val();
-                        console.log("名称",name);
-                        console.log("url",url);
-                        console.log("method",method);
-                        console.log("类型",req_type);
-                        console.log("参数",parameter);
-                        console.log("header",header);
-                        console.log("模块名称",module_name);
+                        var assert_text = $('#assert_text').val();
+
                         if (name ===''){
                           window.alert("请求的名称不能为空");
                         }
@@ -149,7 +158,7 @@
                         }else if(parameter ===''){
                           parameter = "{}";
                         }
-                        // 发送post请求
+                        // "保存"按钮--发送post请求
                         $.post('/interface/save_case/',{
                             "name": name,
                             "req_url" :url,
@@ -157,13 +166,33 @@
                             "req_parameter": parameter,
                             "req_type": req_type,
                             "header": header,
-                            "module": module_name
+                            "module": module_name,
+                            "assert_text": assert_text,
                         },function(resp){
-                            $("#result").html(resp)
-                            window.alert(resp)
-
+                            if (resp.success === "true"){
+                                window.alert(resp.message);
+                                // $("#result").html(resp.data);
+                            }else {
+                                window.alert(resp.message);
+                            }
                         });
+                    });
+                    // 验证数据接口
+                    $("#assert").click(function(){
+                        var result = $("#result").val();
+                        var assert = $("#assert_text").val();
 
+                        if (result === "" || assert === ""){
+                            window.alert("验证数据不能为空！");
+                        }
+
+                        //发送“验证”的post请求
+                        $.post("/interface/api_assert/",{
+                            "result":result,
+                            "assert":assert,
+                        },function (resp) {
+                            window.alert(resp.message)
+                        });
                     });
 
 
