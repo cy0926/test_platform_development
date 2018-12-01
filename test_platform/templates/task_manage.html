@@ -28,7 +28,7 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"> <a href="#">
+            <li> <a href="/manage/project_manage/">
                 <span class="glyphicon glyphicon-th-large"></span> 项目管理</a></li>
             <li><a href="/manage/module_manage/">
                  <span class="glyphicon glyphicon-th"></span> 模块管理</a></li>
@@ -36,7 +36,7 @@
           <ul class="nav nav-sidebar">
             <li><a href="/interface/case_manage/">
                  <span class="glyphicon glyphicon-th-list"></span> 用例管理</a></li>
-            <li><a href="/interface/task_manage/">
+            <li class="active"><a href="#">
                  <span class="glyphicon glyphicon-tasks"></span> 任务管理</a></li>
           </ul>
           <ul class="nav nav-sidebar">
@@ -51,14 +51,14 @@
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
         <div>
-          <h3 class="sub-header">项目列表
+          <h3 class="sub-header">任务列表
                 <button type="button" class="btn btn-primary" style="float: right;margin-right: 100px;"
-                onclick="window.location.href='/manage/add_project/'">添加项目</button>
+                onclick="window.location.href='/interface/add_task/'">创建任务</button>
           </h3>
-                <form class="navbar-form" method="get" action="/manage/search/" style="padding-left: 0px;">
+                <form class="navbar-form" method="get" action="/interface/search_task_name/" style="padding-left: 0px;">
 
                     <div class="form-group">
-                        <input name="search" type="text" placeholder="名称" class="form-control">
+                        <input name="task_name" type="text" placeholder="任务名称" class="form-control">
                     </div>
                     <button type="submit" class="btn btn-success">搜索</button>
                 </form>
@@ -77,13 +77,24 @@
                 </tr>
               </thead>
               <tbody>
-                {% for project in projects %}
+                {% for task in tasks %}
                   <tr>
-                    <td>{{ project.id }}</td>
-                    <td>{{ project.title }}</td>
-                    <td>{{ project.description }}</td>
-                    <td>{{ project.status }}</td>
-                    <td>{{ project.create_time | date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ task.id }}</td>
+                    <td>{{ task.name }}</td>
+                    <td>{{ task.describe }}</td>
+
+                    {% if task.status == 0 %}
+                      <td>未执行</td>
+                    {% endif %}
+
+                    {% if task.status == 1 %}
+                      <td>执行中</td>
+                    {% endif %}
+
+                    {% if task.status == 2 %}
+                      <td>已执行</td>
+                    {% endif %}
+                    <td>{{ task.create_time | date:"Y-m-d H:i:s" }}</td>
                     <td>
                       <a href="/manage/edit_project/{{project.id}}/">编辑</a>&ensp;
                       <a href="/manage/delete_project/{{project.id}}/">删除</a>
@@ -98,20 +109,20 @@
                <div class="pagination">
                   <span class="step-links">
                     <ul class="pagination">
-                      {% if projects.has_previous %}
-                        <li><a href="?search={{ search }}&page={{ projects.previous_page_number }}">&laquo;</a></li>
+                      {% if tasks.has_previous %}
+                        <li><a href="?search={{ search }}&page={{ tasks.previous_page_number }}">&laquo;</a></li>
                       {% endif %}
 
-                       <li><a href="#">{{ projects.number }}</a></li>
+                       <li><a href="#">{{ tasks.number }}</a></li>
 
-                      {% if projects.has_next %}
+                      {% if tasks.has_next %}
                         {% if search %}
-                           <li><a href="?search={{ search }}&page={{ projects.next_page_number }}">&raquo;</a></li>
+                           <li><a href="?search={{ search }}&page={{ tasks.next_page_number }}">&raquo;</a></li>
                         {% else %}
-                           <li><a href="?page={{ projects.next_page_number }}">&raquo;</a></li>
+                           <li><a href="?page={{ tasks.next_page_number }}">&raquo;</a></li>
                         {% endif %}
                       {% endif %}
-                      <li><a href="#">共：{{ projects.paginator.num_pages }} 页</a></li>
+                      <li><a href="#">共：{{ tasks.paginator.num_pages }} 页</a></li>
                     </ul>
 
                       <!-- 尝试另一种分页样式
@@ -163,67 +174,8 @@
          </div>
       </div>
       {% endif %}
+     </div>
     </div>
-
-      {% if type == 'edit' %}
-       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                <h3 class="sub-header">编辑项目
-                    <button class="btn btn-primary"
-                            onclick="window.location.href='/manage/project_manage/'"
-                            style="margin-left: 180px;">取消
-                    </button>
-                </h3>
-
-                <div class="table-responsive">
-                    <form role="form" method="post">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit" class="btn btn-primary" style="margin-top: 8px;">确定</button>
-                        <!--
-                        <button type="submit" class="btn btn-primary" onclick="window.location.href='/manage/project_manage/'" style="margin-top: 8px;">取消</button>
-                        -->
-                    </form>
-                </div>
-       </div>
-      {% endif %}
-           </div>
-      </div>
-    </div>
-
+   </div>
+  </div>
 {% endblock %}
-
-
-
-
-    <!--
-    <nav aria-label="Page navigation">
-      <ul class="pagination">
-        <li>
-          <a href="#" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li>
-        <a href="#" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-        </li>
-      </ul>
-    </nav>
-    -->
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster
-    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"><\/script>')</script>
-    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!-- Just to make our placeholder images work. Don't actually copy the next line!
-    <script src="https://v3.bootcss.com/assets/js/vendor/holder.min.js"></script>
-    -->
-

@@ -1,6 +1,6 @@
 # -*-coding:utf-8-*-
 from django.urls import path
-from interface_app.views import testcase_views, testcase_api
+from interface_app.views import testcase_views, testcase_api, testtask_views
 
 urlpatterns = [
     # 用例管理
@@ -20,5 +20,9 @@ urlpatterns = [
     path('get_case_info/', testcase_api.get_case_info),
     path('api_assert/', testcase_api.api_assert),
     path('update_case/', testcase_api.update_case),
+
+    # 任务管理
+    path('task_manage/', testtask_views.task_manage),
+    path('search_task_name/', testtask_views.search_task_name),
 
 ]

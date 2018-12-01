@@ -5,14 +5,16 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from interface_app.forms import TestCaseForm
 
 
-# 用例管理页面
+# 用例管理页面（获取用例列表）
 def case_manage(request):
-    cases_list = TestCase.objects.get_queryset().order_by('id')
-    paginator = Paginator(cases_list, 10)
+    # 直接用objects.all()，分页的是会报错，所以用了order_by
+    # cases_list = TestCase.objects.all()
+    tasks_list = TestCase.objects.get_queryset().order_by('id')
+    paginator = Paginator(tasks_list, 10)
+
     page = request.GET.get("page")
     try:
         contacts = paginator.page(page)
-
     except PageNotAnInteger:
         # 如果页数不是整型, 取第一页.
         contacts = paginator.page(1)
@@ -21,9 +23,9 @@ def case_manage(request):
         contacts = paginator.page(paginator.num_pages)
 
     if request.method == "GET":
-        return render(request, "case_manage.html",
-                  {"cases": contacts,
-                   "type": "list"})
+        return render(request, "case_manage.html", {
+            "cases": contacts,
+            "type": "list"})
     else:
         return HttpResponse("404")
 
@@ -32,9 +34,9 @@ def case_manage(request):
 def add_case(request):
     if request.method == "GET":
         # 这里的form表单应该暂时没用到
-        form = TestCaseForm()
+        # form = TestCaseForm()
         return render(request, "add_case.html", {
-            "form": form,
+            # "form": form,
             "type": "add"
         })
     else:
@@ -45,10 +47,11 @@ def add_case(request):
 def debug_case(request, case_id):
     if request.method == "GET":
         # 这里的form表单应该暂时没用到
-        form = TestCaseForm(request.POST)
-        return render(request, 'debug_case.html',
-                      {'form': form,
-                       'type': 'edit'})
+        # form = TestCaseForm(request.POST)
+        return render(request, 'debug_case.html', {
+            # 'form': form,
+            'type': 'edit'
+        })
     else:
 
         return HttpResponse('404')
@@ -60,18 +63,25 @@ def search_case_name(request):
         # 获取搜索关键字
         search = request.GET.get("case_name", "")
         search_list = TestCase.objects.filter(name__contains=search)
+
         paginator = Paginator(search_list, 10)
         # 获取当前页码
         page = request.GET.get("page")
         try:
             contacts = paginator.page(page)
         except PageNotAnInteger:
+            # 如果页数不是整型, 取第一页.
             contacts = paginator.page(1)
         except EmptyPage:
+            # 如果页数超出查询范围，取最后一页
             contacts = paginator.page(paginator.num_pages)
-        return render(request, "case_manage.html", {'cases': contacts,
-                                                    'type': "list",
-                                                    'search': search})
+        return render(request, "case_manage.html", {
+            'cases': contacts,
+            'type': "list",
+            'search': search
+        })
+    else:
+        return HttpResponse('404')
 
 
 # 删除用例
