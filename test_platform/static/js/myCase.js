@@ -36,4 +36,36 @@ var CaseInit = function (case_id) {
     // 调用getCaseInfo函数
     getCaseInfo();
 
-}
+};
+
+
+// 添加任务--或者用例列表
+var CaseListInit = function () {
+
+    function getCaseListInfo(){
+
+        var options = "";
+        // 获取某个用例的信息
+        $.get("/interface/get_case_list", {},
+            function (resp) {
+            if(resp.success === "true"){
+               var cases = resp.data;
+               for (var i=0; i< cases.length; i++){
+                   var option = '<input type="checkbox" name= "'+ cases[i].name
+                         +'" value="'+ cases[i].id +'"/>' +cases[i].name + '<br>'
+                   options = options + option;
+               }
+               var devCaseList = document.querySelector(".caseList");
+               devCaseList.innerHTML = options;
+               console.log("用例列表：",options);
+
+            }else{
+                window.alert(resp.message);
+            }
+        });
+    }
+    // 调用getCaseListInfo函数
+    getCaseListInfo();
+
+};
+

@@ -153,28 +153,17 @@
         </div>
       {% endif %}
 
-
+      <!-- 添加任务页面 -->
       {% if type == 'add' %}
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-           <h3 class="sub-header">添加项目
-                <button class="btn btn-primary" onclick="window.location.href='/manage/project_manage/'" style="margin-left: 180px;">取消
-                </button>
-           </h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="table-responsive">
-          <form action="/manage/add_project/" method="post">
-              {% csrf_token %}
-              {{form.as_p}}
-          <button type="submit" class="btn btn-primary" style="margin-top: 8px;">确定</button>
-          <!--
-          <button type="submit" class="btn btn-primary" onclick="window.location.href='/manage/project_manage/'" style="margin-top: 8px;">取消</button>
-          -->
-          </form>
-         </div>
+          <div class="row">
+              {% block add_task%}
+                <!-- add_task.html -->
+              {% endblock %}
+          </div>
       </div>
       {% endif %}
-     </div>
+
     </div>
    </div>
   </div>

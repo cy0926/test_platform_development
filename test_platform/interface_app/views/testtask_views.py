@@ -56,3 +56,11 @@ def search_task_name(request):
             "type": "list",
             "search": search
         })
+
+
+# 创建任务
+def add_task(request):
+    if request.method == "GET":
+        return render(request, "add_task.html", {
+            "type": "add",
+        })
