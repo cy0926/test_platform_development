@@ -1,6 +1,9 @@
 # -*-coding:utf-8-*-
 from django.urls import path
-from interface_app.views import testcase_views, testcase_api, testtask_views
+from interface_app.views import testcase_views
+from interface_app.views import testcase_api
+from interface_app.views import testtask_views
+from interface_app.views import testtask_api
 
 urlpatterns = [
     # 用例管理
@@ -26,7 +29,10 @@ urlpatterns = [
     path('search_task_name/', testtask_views.search_task_name),
     path('add_task/', testtask_views.add_task),
 
+
     # 任务管理 -- 由JS调用的接口
     path('get_case_list', testcase_api.get_case_list),
+    path('save_task_data/', testtask_api.save_task_data),
+
 
 ]
