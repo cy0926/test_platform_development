@@ -25,6 +25,7 @@
 
             <div class="form-group">
                 <label>用例：</label>
+                <input type="checkbox" id="selectAll">全选/取消
                 <div class="caseList" style="overflow-y:scroll; height: 200px; background: #FFFFFF; padding-left: 15px;">
             </div>
 
@@ -78,6 +79,23 @@
                             }
                         });
                     });
+
+                    //运行用例
+                    $("#selectAll").click(function () {
+                        //console.log("55555")
+                        var selectAll = document.querySelector('#selectAll');
+                        var allCases = document.querySelectorAll('.caseList > input');
+                        if (selectAll.checked === true){
+                             for (var i=0; i< allCases.length; i++){
+                                 allCases[i].checked = true;
+                             }
+                        }else{
+                             for (var i=0; i<allCases.length; i++){
+                                 allCases[i].checked = false;
+                             }
+                        }
+                    });
+
 
 
 

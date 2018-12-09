@@ -96,8 +96,12 @@
                     {% endif %}
                     <td>{{ task.create_time | date:"Y-m-d H:i:s" }}</td>
                     <td>
-                      <a href="/manage/edit_project/{{project.id}}/">编辑</a>&ensp;
-                      <a href="/manage/delete_project/{{project.id}}/">删除</a>
+                      <a href="/interface/run_task/{{task.id}}/">
+                          <span class="glyphicon glyphicon-play"></span>
+                      </a>&ensp;
+                      <a href="/interface/delete_task/{{task.id}}/">
+                          <span class="glyphicon glyphicon-trash"></span>
+                      </a>
                     </td>
                   </tr>
 
