@@ -28,6 +28,7 @@ urlpatterns = [
     path('task_manage/', testtask_views.task_manage),
     path('search_task_name/', testtask_views.search_task_name),
     path('add_task/', testtask_views.add_task),
+    path('run_task/<int:tid>/', testtask_views.run_task),
 
 
     # 任务管理 -- 由JS调用的接口

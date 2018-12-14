@@ -1,4 +1,4 @@
-from interface_app.models import TestTask
+from interface_app.models import TestTask, TestCase
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -64,3 +64,28 @@ def add_task(request):
         return render(request, "add_task.html", {
             "type": "add",
         })
+
+
+# 获取任务对应的用例数据
+def run_task(request, tid):
+    if request.method == "GET":
+        task_obj = TestTask.objects.get(id=tid)
+        cases_list = task_obj.cases.split(",")
+        cases_list.pop(-1)
+        # print(cases_list)
+        all_cases_dict = {}
+        for case_id in cases_list:
+            case_obj = TestCase.objects.get(id=case_id)
+            case_dic = {
+                "url": case_obj.url,
+                "method": case_obj.req_method,
+                "type_": case_obj.req_type,
+                "header": case_obj.req_header,
+                "parameter": case_obj.req_parameter,
+                "assert_": case_obj.response_assert
+            }
+            all_cases_dict[case_obj.id] = case_dic
+
+        print(all_cases_dict)
+    else:
+        return HttpResponse("404")
