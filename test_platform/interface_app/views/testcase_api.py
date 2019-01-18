@@ -48,7 +48,7 @@ def save_case(request):
         req_type = request.POST.get("req_type", "")
         header = request.POST.get("header", "")
         module_name = request.POST.get("module", "")
-        assert_text = requests.POST.get("")
+        assert_text = request.POST.get("")
 
         if url == "" or method == "" or req_type == "" or module_name == "" or assert_text == "":
             return common.response_failed("必传参数为空")
