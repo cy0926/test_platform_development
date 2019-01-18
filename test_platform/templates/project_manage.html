@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-  <body>
+
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
@@ -28,16 +28,22 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"> <a href="#">项目管理</a></li>
-            <li><a href="/manage/module_manage/">模块管理</a></li>
+            <li class="active"> <a href="#">
+                <span class="glyphicon glyphicon-th-large"></span> 项目管理</a></li>
+            <li><a href="/manage/module_manage/">
+                 <span class="glyphicon glyphicon-th"></span> 模块管理</a></li>
           </ul>
           <ul class="nav nav-sidebar">
-            <li><a href="/interface/case_manage/">用例管理</a></li>
-            <li><a href="">任务管理</a></li>
+            <li><a href="/interface/case_manage/">
+                 <span class="glyphicon glyphicon-th-list"></span> 用例管理</a></li>
+            <li><a href="/interface/task_manage/">
+                 <span class="glyphicon glyphicon-tasks"></span> 任务管理</a></li>
           </ul>
           <ul class="nav nav-sidebar">
-            <li><a href="">MockServer</a></li>
-            <li><a href="">测试工具</a></li>
+            <li><a href="">
+                <span class="glyphicon glyphicon-log-in"></span> MockServer</a></li>
+            <li><a href="">
+                <span class="glyphicon glyphicon-wrench"></span> 测试工具</a></li>
           </ul>
         </div>
 
